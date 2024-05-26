@@ -1,0 +1,26 @@
+im1= read_image(TemplateImage);
+im2=read_image(SourceImage);
+% apply template matching
+result=template_matching(im1,im2);
+display im1, im2, result
+End;
+Function template_matching:
+result=template_matching(TemplateImage, SourceImage):
+[r1, c1]=size(SourceImage);
+[r2, c2]=size(TemplateImage);
+TempSize=r2*c2;
+Minimum=1000000;
+% Absolute difference Matrix for i=1:(r1-r2+1)
+for j=1:(c1-c2+1)
+Nimage=Target(i:i+r2-1,j:j+c2-1);
+absDiff=sum(sum(abs(Nimage-Template)))/TempSize;
+absDiffMat(i,j)=absDiff;
+if absDiff <Minimum
+Minimum=absDiff;
+end;
+end
+end
+ratio=10; % for calibration
+Threshold=ratio*Minimum;
+% return the coordinates of all absDiffMat elements which are <= Threshold
+coordinates= find(absDiffMat<=Threshold);
